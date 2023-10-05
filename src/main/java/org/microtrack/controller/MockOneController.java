@@ -1,11 +1,8 @@
 package org.microtrack.controller;
 
 import jakarta.validation.Valid;
-import org.microtrack.dto.Trace;
-import org.microtrack.model.dto.MockOneBodyDTO;
-import org.microtrack.service.Manager;
+import org.microtrack.model.dto.ProductDTO;
 import org.microtrack.service.MockOneService;
-import org.microtrack.service.TraceService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,18 +10,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 
 @RestController
-@RequestMapping("/mock-one")
+@RequestMapping("/request-purchase-product")
 public class MockOneController {
 
     public final MockOneService service = new MockOneService();
 
     @PostMapping
-    public ResponseEntity<String> testOne(@RequestBody @Valid MockOneBodyDTO body) throws IOException, InterruptedException {
-        service.test(body);
-        return ResponseEntity.ok("Deu certo!");
+    public ResponseEntity<String> buyProduct(@RequestBody @Valid ProductDTO body) {
+        try {
+            service.buyProduct(body);
+            return ResponseEntity.ok("Deu certo!"); // TODO Retorno adequado
+        } catch (Exception ex) {
+            // TODO add print
+            return ResponseEntity.internalServerError().body(ex.getMessage());
+        }
     }
 
 }
